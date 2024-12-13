@@ -4,11 +4,17 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-image: url('https://wallpapercave.com/wp/wp8984777.png'); 
+    background-size: cover;
+    background-position: center;
 }
 
 .container {
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .player-names {
@@ -25,6 +31,7 @@ body {
 .scoreboard {
     margin-bottom: 20px;
     font-size: 1.2em;
+    color: #333;
 }
 
 .board {
@@ -85,4 +92,11 @@ button:hover {
 .cell.winning {
     background-color: yellow;
     transform: scale(1.1);
+}
+
+
+#scoreX, #scoreO {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
 }
