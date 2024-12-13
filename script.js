@@ -2,12 +2,17 @@ const board = document.getElementById('board');
 const cells = document.querySelectorAll('.cell');
 const messageDisplay = document.getElementById('message');
 const restartButton = document.getElementById('restart');
+const startGameButton = document.getElementById('startGame');
 const playerXInput = document.getElementById('playerX');
 const playerOInput = document.getElementById('playerO');
+const scoreXDisplay = document.getElementById('scoreX');
+const scoreODisplay = document.getElementById('scoreO');
 
 let currentPlayer = 'X';
-let gameActive = true;
+let gameActive = false;
 let gameState = ['', '', '', '', '', '', '', '', ''];
+let scoreX = 0;
+let scoreO = 0;
 
 const winningConditions = [
     [0, 1, 2],
@@ -21,12 +26,11 @@ const winningConditions = [
 ];
 
 function handleCellClick(event) {
+    if (!gameActive) return;
     const clickedCell = event.target;
     const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
 
-    if (gameState[clickedCellIndex] !== '' || !gameActive) {
-        return;
-    }
+    if (gameState[clickedCellIndex] !== '') return;
 
     gameState[clickedCellIndex] = currentPlayer;
     clickedCell.textContent = currentPlayer;
@@ -40,9 +44,7 @@ function checkResult() {
 
     for (let i = 0; i < winningConditions.length; i++) {
         const [a, b, c] = winningConditions[i];
-        if (gameState[a] === '' || gameState[b] === '' || gameState[c] === '') {
-            continue;
-        }
+        if (gameState[a] === '' || gameState[b] === '' || gameState[c] === '') continue;
         if (gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
             roundWon = true;
             highlightWinningCells(a, b, c);
@@ -52,12 +54,13 @@ function checkResult() {
 
     if (roundWon) {
         messageDisplay.textContent = `${getPlayerName(currentPlayer)} wins! 🎉`;
+        updateScore(currentPlayer);
         gameActive = false;
         return;
     }
 
     if (!gameState.includes('')) {
-        messageDisplay.textContent = 'Oops! Nobody won. It\'s a draw! 😢';
+        messageDisplay.textContent = 'It\'s a draw! 😢';
         gameActive = false;
         return;
     }
@@ -75,6 +78,16 @@ function getPlayerName(player) {
     return player === 'X' ? playerXInput.value || 'Player X' : playerOInput.value || 'Player O';
 }
 
+function updateScore(winner) {
+    if (winner === 'X') {
+        scoreX++;
+        scoreXDisplay.textContent = `Player X: ${scoreX}`;
+    } else {
+        scoreO++;
+        scoreODisplay.textContent = `Player O: ${scoreO}`;
+    }
+}
+
 function restartGame() {
     gameActive = true;
     currentPlayer = 'X';
@@ -86,5 +99,15 @@ function restartGame() {
     });
 }
 
+function startGame() {
+    if (!playerXInput.value || !playerOInput.value) {
+        alert('Please enter names for both players');
+        return;
+    }
+    gameActive = true;
+   
+}
+
 cells.forEach(cell => cell.addEventListener('click', handleCellClick));
 restartButton.addEventListener('click', restartGame);
+startGameButton.addEventListener('click', startGame);
